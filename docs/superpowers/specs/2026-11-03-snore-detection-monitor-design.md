@@ -79,6 +79,9 @@ This allows the user to tap play, verify with their own ears that their brother 
 |                |                                          |
 |                v                                          |
 |  [TelegramDispatcher (HTTPS POST to Telegram Bot API)]    |
+|                |                                          |
+|                v                                          |
+|  [One-and-Done Shutdown (stopSelf & reschedule)]          |
 +-----------------------------------------------------------+
                              |
                              | (Internet / Wi-Fi)
@@ -93,27 +96,29 @@ This allows the user to tap play, verify with their own ears that their brother 
 ```
 
 ### Component Details:
-1. **Alarm Receiver (`BootAndScheduleReceiver`):**
+1. **Target SDK & Distribution (Builder Decision):**
+   - Configured with `targetSdkVersion 33` (Android 13) for direct APK sideloading. This ensures `AlarmManager` can reliably start `SnoreDetectionService` without hitting Android 14's background microphone launch restrictions.
+2. **Alarm Receiver (`BootAndScheduleReceiver`):**
    - Schedules daily alarm at 23:00 IST using `AlarmManager.setExactAndAllowWhileIdle()`.
    - Re-registers alarms on device reboot (`ACTION_BOOT_COMPLETED`).
-2. **Detection Service (`SnoreDetectionService`):**
+3. **Detection Service (`SnoreDetectionService`):**
    - Starts foreground service displaying: *"Monitoring sleep audio..."*.
+   - Uses `AudioManager` audio focus listener to automatically pause and yield the microphone if a phone call or media playback begins on the brother's phone.
    - Uses `AudioRecord` (16kHz, 16-bit Mono PCM).
    - Calculates Root Mean Square (RMS) decibel amplitude over 100ms frames.
    - Detects snoring rhythm: an acoustic surge above background baseline followed by a quiet exhalation/pause every 2.5 to 5 seconds.
    - Requires 5 consecutive rhythmic cycles within a 45-second window to trigger detection (filtering out isolated noises like coughs or door creaks).
-3. **Audio Snippet Recorder (`SnippetRecorder`):**
+4. **Audio Snippet Recorder (`SnippetRecorder`):**
    - Once snoring rhythm is identified, records the next 15 seconds into an AAC-encoded `.m4a` file in the app cache directory.
-4. **Delivery Dispatcher (`TelegramDispatcher`):**
-   - Uses Telegram Bot API `sendVoice` / `sendDocument` endpoint via OkHttp.
+5. **Delivery Dispatcher (`TelegramDispatcher`):**
+   - Uses Telegram Bot API `sendVoice` endpoint via OkHttp.
    - **Why Telegram:**
      - 100% free, zero cloud server hosting or maintenance needed.
      - Works across any distance (home Wi-Fi or mobile data).
      - Native audio player in Telegram notification and chat: user can press play right from their lock screen or chat upstairs.
      - Bot setup takes 60 seconds via `@BotFather`.
-5. **Debounce Logic:**
-   - After dispatching a snippet, the service stops listening or enters a 30-minute sleep state to avoid continuous duplicate clips.
-   - Automatically shuts down at 6:00 AM IST (configurable).
+6. **Lifecycle ("One-and-Done"):**
+   - Immediately after the 15-second snippet is sent, the service calls `stopSelf()`, releases the microphone and wake locks, dismisses the notification, and reschedules for the next evening at 11:00 PM. This guarantees it will not wake the user up repeatedly once they go to sleep.
 
 ---
 
