@@ -158,13 +158,14 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
                     Button(
                         onClick = {
-                            testStatusMessage = "Testing connection..."
+                            testStatusMessage = "Connecting to Telegram..."
                             coroutineScope.launch {
                                 val result = TelegramDispatcher().sendTestMessage(botToken, chatId)
                                 testStatusMessage = if (result.isSuccess) {
                                     "✅ Test message sent! Check your Telegram."
                                 } else {
-                                    "❌ Failed: ${result.exceptionOrNull()?.message}"
+                                    val err = result.exceptionOrNull()?.message ?: "Unknown error"
+                                    "❌ Error: $err\n\n📌 Quick Checklist:\n• Open your bot in Telegram and tap 'START'.\n• Ensure Bot Token format is numbers:letters (e.g. 712345:ABCdef).\n• Check phone internet connection."
                                 }
                             }
                         },

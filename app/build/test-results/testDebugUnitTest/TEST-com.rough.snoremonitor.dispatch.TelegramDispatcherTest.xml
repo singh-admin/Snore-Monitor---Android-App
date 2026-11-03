@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.rough.snoremonitor.dispatch.TelegramDispatcherTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-11-03T17:35:58.139Z" hostname="SinghBoyHere-851.local" time="0.113">
+<testsuite name="com.rough.snoremonitor.dispatch.TelegramDispatcherTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-11-03T17:57:21.469Z" hostname="SinghBoyHere-851.local" time="0.108">
   <properties/>
-  <testcase name="testRejectsNonExistentFile" classname="com.rough.snoremonitor.dispatch.TelegramDispatcherTest" time="0.111"/>
+  <testcase name="testRejectsNonExistentFile" classname="com.rough.snoremonitor.dispatch.TelegramDispatcherTest" time="0.106"/>
   <testcase name="testRejectsBlankCredentials" classname="com.rough.snoremonitor.dispatch.TelegramDispatcherTest" time="0.002"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
