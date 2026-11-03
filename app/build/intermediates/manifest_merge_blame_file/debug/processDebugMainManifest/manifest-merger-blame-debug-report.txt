@@ -1,0 +1,194 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.rough.snoremonitor"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="33" />
+10
+11    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+11-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:4:5-71
+11-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:4:22-68
+12    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+12-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:5:5-77
+12-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:5:22-74
+13    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+13-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:6:5-88
+13-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:6:22-85
+14    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+14-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:7:5-77
+14-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:7:22-74
+15    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+15-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:8:5-79
+15-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:8:22-76
+16    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+16-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:9:5-74
+16-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:9:22-71
+17    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+17-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:10:5-81
+17-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:10:22-78
+18    <uses-permission android:name="android.permission.INTERNET" />
+18-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:11:5-67
+18-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:11:22-64
+19    <uses-permission android:name="android.permission.WAKE_LOCK" />
+19-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:12:5-68
+19-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:12:22-65
+20    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+20-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:13:5-95
+20-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:13:22-92
+21
+22    <permission
+22-->[androidx.core:core:1.13.1] /Users/singh/.gradle/caches/8.14.3/transforms/7711fed86fdccb92dd0f2c2b29db487a/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+23        android:name="com.rough.snoremonitor.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+23-->[androidx.core:core:1.13.1] /Users/singh/.gradle/caches/8.14.3/transforms/7711fed86fdccb92dd0f2c2b29db487a/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+24        android:protectionLevel="signature" />
+24-->[androidx.core:core:1.13.1] /Users/singh/.gradle/caches/8.14.3/transforms/7711fed86fdccb92dd0f2c2b29db487a/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+25
+26    <uses-permission android:name="com.rough.snoremonitor.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+26-->[androidx.core:core:1.13.1] /Users/singh/.gradle/caches/8.14.3/transforms/7711fed86fdccb92dd0f2c2b29db487a/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+26-->[androidx.core:core:1.13.1] /Users/singh/.gradle/caches/8.14.3/transforms/7711fed86fdccb92dd0f2c2b29db487a/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+27
+28    <application
+28-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:15:5-53:19
+29        android:allowBackup="true"
+29-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:16:9-35
+30        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+30-->[androidx.core:core:1.13.1] /Users/singh/.gradle/caches/8.14.3/transforms/7711fed86fdccb92dd0f2c2b29db487a/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+31        android:debuggable="true"
+32        android:extractNativeLibs="false"
+33        android:icon="@android:drawable/ic_btn_speak_now"
+33-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:17:9-58
+34        android:label="@string/app_name"
+34-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:18:9-41
+35        android:roundIcon="@android:drawable/ic_btn_speak_now"
+35-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:19:9-63
+36        android:supportsRtl="true"
+36-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:20:9-35
+37        android:theme="@android:style/Theme.Material.Light.NoActionBar" >
+37-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:21:9-72
+38        <activity
+38-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:23:9-31:20
+39            android:name="com.rough.snoremonitor.ui.MainActivity"
+39-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:24:13-44
+40            android:exported="true"
+40-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:25:13-36
+41            android:windowSoftInputMode="adjustResize" >
+41-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:26:13-55
+42            <intent-filter>
+42-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:27:13-30:29
+43                <action android:name="android.intent.action.MAIN" />
+43-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:28:17-69
+43-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:28:25-66
+44
+45                <category android:name="android.intent.category.LAUNCHER" />
+45-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:29:17-77
+45-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:29:27-74
+46            </intent-filter>
+47        </activity>
+48
+49        <service
+49-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:33:9-37:58
+50            android:name="com.rough.snoremonitor.service.SnoreDetectionService"
+50-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:34:13-58
+51            android:enabled="true"
+51-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:35:13-35
+52            android:exported="false"
+52-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:36:13-37
+53            android:foregroundServiceType="microphone" />
+53-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:37:13-55
+54
+55        <receiver
+55-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:39:9-41:40
+56            android:name="com.rough.snoremonitor.receiver.AlarmReceiver"
+56-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:40:13-51
+57            android:exported="false" />
+57-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:41:13-37
+58        <receiver
+58-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:43:9-51:20
+59            android:name="com.rough.snoremonitor.receiver.BootReceiver"
+59-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:44:13-50
+60            android:enabled="true"
+60-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:45:13-35
+61            android:exported="true" >
+61-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:46:13-36
+62            <intent-filter>
+62-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:47:13-50:29
+63                <action android:name="android.intent.action.BOOT_COMPLETED" />
+63-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:48:17-79
+63-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:48:25-76
+64                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+64-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:49:17-82
+64-->/Users/singh/project/Rough/app/src/main/AndroidManifest.xml:49:25-79
+65            </intent-filter>
+66        </receiver>
+67
+68        <provider
+68-->[androidx.emoji2:emoji2:1.3.0] /Users/singh/.gradle/caches/8.14.3/transforms/fed038f885c82fb02ee06d17a83b1da1/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+69            android:name="androidx.startup.InitializationProvider"
+69-->[androidx.emoji2:emoji2:1.3.0] /Users/singh/.gradle/caches/8.14.3/transforms/fed038f885c82fb02ee06d17a83b1da1/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+70            android:authorities="com.rough.snoremonitor.androidx-startup"
+70-->[androidx.emoji2:emoji2:1.3.0] /Users/singh/.gradle/caches/8.14.3/transforms/fed038f885c82fb02ee06d17a83b1da1/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+71            android:exported="false" >
+71-->[androidx.emoji2:emoji2:1.3.0] /Users/singh/.gradle/caches/8.14.3/transforms/fed038f885c82fb02ee06d17a83b1da1/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+72            <meta-data
+72-->[androidx.emoji2:emoji2:1.3.0] /Users/singh/.gradle/caches/8.14.3/transforms/fed038f885c82fb02ee06d17a83b1da1/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+73                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+73-->[androidx.emoji2:emoji2:1.3.0] /Users/singh/.gradle/caches/8.14.3/transforms/fed038f885c82fb02ee06d17a83b1da1/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+74                android:value="androidx.startup" />
+74-->[androidx.emoji2:emoji2:1.3.0] /Users/singh/.gradle/caches/8.14.3/transforms/fed038f885c82fb02ee06d17a83b1da1/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+75            <meta-data
+75-->[androidx.lifecycle:lifecycle-process:2.8.5] /Users/singh/.gradle/caches/8.14.3/transforms/bde6f6f312349983f89aeeeb76ab8cdb/transformed/lifecycle-process-2.8.5/AndroidManifest.xml:29:13-31:52
+76                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+76-->[androidx.lifecycle:lifecycle-process:2.8.5] /Users/singh/.gradle/caches/8.14.3/transforms/bde6f6f312349983f89aeeeb76ab8cdb/transformed/lifecycle-process-2.8.5/AndroidManifest.xml:30:17-78
+77                android:value="androidx.startup" />
+77-->[androidx.lifecycle:lifecycle-process:2.8.5] /Users/singh/.gradle/caches/8.14.3/transforms/bde6f6f312349983f89aeeeb76ab8cdb/transformed/lifecycle-process-2.8.5/AndroidManifest.xml:31:17-49
+78            <meta-data
+78-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+79                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+79-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+80                android:value="androidx.startup" />
+80-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+81        </provider>
+82
+83        <receiver
+83-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+84            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+84-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+85            android:directBootAware="false"
+85-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+86            android:enabled="true"
+86-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+87            android:exported="true"
+87-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+88            android:permission="android.permission.DUMP" >
+88-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+89            <intent-filter>
+89-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+90                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+90-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+90-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+91            </intent-filter>
+92            <intent-filter>
+92-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+93                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+93-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+93-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+94            </intent-filter>
+95            <intent-filter>
+95-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+96                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+96-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+96-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+97            </intent-filter>
+98            <intent-filter>
+98-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+99                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+99-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+99-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/singh/.gradle/caches/8.14.3/transforms/6646ab50c6012cff4a6328c8ebcdb68a/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+100            </intent-filter>
+101        </receiver>
+102    </application>
+103
+104</manifest>
