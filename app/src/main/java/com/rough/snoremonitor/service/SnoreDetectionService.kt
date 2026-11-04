@@ -1,5 +1,7 @@
 package com.rough.snoremonitor.service
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -18,6 +20,7 @@ import com.rough.snoremonitor.scheduler.AlarmScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -34,11 +37,15 @@ class SnoreDetectionService : Service() {
     companion object {
         const val ACTION_START_MONITORING = "com.rough.snoremonitor.START_MONITORING"
         const val ACTION_STOP_MONITORING = "com.rough.snoremonitor.STOP_MONITORING"
+        const val ACTION_PAUSE_FOR_RECORDING = "com.rough.snoremonitor.PAUSE_FOR_RECORDING"
+        const val ACTION_RESUME_AFTER_RECORDING = "com.rough.snoremonitor.RESUME_AFTER_RECORDING"
         var isServiceRunning = false
             private set
     }
 
-    private val serviceScope = CoroutineScope(Dispatchers.Default + Job())
+    private var serviceJob = SupervisorJob()
+    private var serviceScope = CoroutineScope(Dispatchers.Default + serviceJob)
+    private var listeningJob: Job? = null
     private var wakeLock: PowerManager.WakeLock? = null
     private var audioRecord: AudioRecord? = null
     private var audioManager: AudioManager? = null
@@ -76,9 +83,22 @@ class SnoreDetectionService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action == ACTION_STOP_MONITORING) {
-            stopMonitoring()
-            return START_NOT_STICKY
+        when (intent?.action) {
+            ACTION_STOP_MONITORING -> {
+                stopMonitoring()
+                return START_NOT_STICKY
+            }
+            ACTION_PAUSE_FOR_RECORDING -> {
+                listeningJob?.cancel()
+                releaseAudioRecord()
+                return START_STICKY
+            }
+            ACTION_RESUME_AFTER_RECORDING -> {
+                if (isServiceRunning) {
+                    startListeningLoop()
+                }
+                return START_STICKY
+            }
         }
 
         isServiceRunning = true
@@ -107,7 +127,8 @@ class SnoreDetectionService : Service() {
     }
 
     private fun startListeningLoop() {
-        serviceScope.launch {
+        listeningJob?.cancel()
+        listeningJob = serviceScope.launch {
             val sampleRate = 16000
             val channelConfig = AudioFormat.CHANNEL_IN_MONO
             val audioFormat = AudioFormat.ENCODING_PCM_16BIT
@@ -207,6 +228,7 @@ class SnoreDetectionService : Service() {
 
     private fun stopMonitoring() {
         isServiceRunning = false
+        listeningJob?.cancel()
         releaseAudioRecord()
         @Suppress("DEPRECATION")
         audioManager?.abandonAudioFocus(audioFocusChangeListener)
@@ -217,9 +239,42 @@ class SnoreDetectionService : Service() {
             }
         } catch (_: Exception) {}
 
-        serviceScope.cancel()
+        serviceJob.cancel()
+        serviceJob = SupervisorJob()
+        serviceScope = CoroutineScope(Dispatchers.Default + serviceJob)
+
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        if (isServiceRunning) {
+            val restartIntent = Intent(applicationContext, SnoreDetectionService::class.java).apply {
+                action = ACTION_START_MONITORING
+                `package` = packageName
+            }
+            val pendingIntent = PendingIntent.getService(
+                applicationContext,
+                1001,
+                restartIntent,
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            )
+            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            try {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis() + 1000L,
+                    pendingIntent
+                )
+            } catch (_: Exception) {
+                alarmManager.set(
+                    AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis() + 1000L,
+                    pendingIntent
+                )
+            }
+        }
     }
 
     override fun onDestroy() {

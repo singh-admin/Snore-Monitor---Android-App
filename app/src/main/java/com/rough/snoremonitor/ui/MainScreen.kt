@@ -2,6 +2,10 @@ package com.rough.snoremonitor.ui
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.PowerManager
+import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -223,6 +227,17 @@ fun MainScreen(modifier: Modifier = Modifier) {
                             onCheckedChange = { enabled ->
                                 isRemoteEnabled = enabled
                                 prefs.isRemoteControlEnabled = enabled
+                                if (enabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    val powerManager = context.getSystemService(Context.POWER_SERVICE) as? PowerManager
+                                    if (powerManager?.isIgnoringBatteryOptimizations(context.packageName) == false) {
+                                        try {
+                                            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                                                data = Uri.parse("package:${context.packageName}")
+                                            }
+                                            context.startActivity(intent)
+                                        } catch (_: Exception) {}
+                                    }
+                                }
                                 val serviceIntent = Intent(context, TelegramRemoteService::class.java).apply {
                                     action = if (enabled) TelegramRemoteService.ACTION_START else TelegramRemoteService.ACTION_STOP
                                 }

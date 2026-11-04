@@ -34,12 +34,14 @@
             android:name=".service.SnoreDetectionService"
             android:enabled="true"
             android:exported="false"
+            android:stopWithTask="false"
             android:foregroundServiceType="microphone" />
 
         <service
             android:name=".service.TelegramRemoteService"
             android:enabled="true"
             android:exported="false"
+            android:stopWithTask="false"
             android:foregroundServiceType="microphone" />
 
         <receiver

@@ -1,5 +1,7 @@
 package com.rough.snoremonitor.service
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -14,6 +16,7 @@ import com.rough.snoremonitor.remote.TelegramCommandParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -30,7 +33,9 @@ class TelegramRemoteService : Service() {
             private set
     }
 
-    private val serviceScope = CoroutineScope(Dispatchers.IO + Job())
+    private var serviceJob = SupervisorJob()
+    private var serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
+    private var pollingJob: Job? = null
     private var wakeLock: PowerManager.WakeLock? = null
 
     private lateinit var prefs: AppPreferences
@@ -57,7 +62,11 @@ class TelegramRemoteService : Service() {
         }
 
         isServiceRunning = true
-        wakeLock?.acquire(12 * 60 * 60 * 1000L) // 12 hours safety timeout
+        try {
+            if (wakeLock?.isHeld != true) {
+                wakeLock?.acquire(12 * 60 * 60 * 1000L) // 12 hours safety timeout
+            }
+        } catch (_: Exception) {}
 
         val notification = ServiceNotificationManager.buildRemoteNotification(
             this,
@@ -71,7 +80,11 @@ class TelegramRemoteService : Service() {
     }
 
     private fun startPollingLoop() {
-        serviceScope.launch {
+        if (pollingJob?.isActive == true) {
+            return
+        }
+
+        pollingJob = serviceScope.launch {
             while (isActive) {
                 val token = prefs.botToken
                 val chatId = prefs.chatId
@@ -112,7 +125,25 @@ class TelegramRemoteService : Service() {
                             "🎙️ Recording 15-second room audio right now. Please wait..."
                         )
 
+                        // If SnoreDetectionService is actively monitoring, temporarily pause its mic lock
+                        val wasSnoreServiceRunning = SnoreDetectionService.isServiceRunning
+                        if (wasSnoreServiceRunning) {
+                            val pauseIntent = Intent(this@TelegramRemoteService, SnoreDetectionService::class.java).apply {
+                                action = SnoreDetectionService.ACTION_PAUSE_FOR_RECORDING
+                            }
+                            startService(pauseIntent)
+                            delay(250L)
+                        }
+
                         val recordResult = snippetRecorder.recordSnippet(15_000L)
+
+                        if (wasSnoreServiceRunning) {
+                            val resumeIntent = Intent(this@TelegramRemoteService, SnoreDetectionService::class.java).apply {
+                                action = SnoreDetectionService.ACTION_RESUME_AFTER_RECORDING
+                            }
+                            startService(resumeIntent)
+                        }
+
                         recordResult.onSuccess { snippetFile ->
                             dispatcher.sendVoiceSnippet(
                                 botToken = token,
@@ -163,15 +194,51 @@ class TelegramRemoteService : Service() {
         }
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        // If remote control is enabled, ensure the service restarts if the user closes/swipes the app
+        if (prefs.isRemoteControlEnabled) {
+            val restartIntent = Intent(applicationContext, TelegramRemoteService::class.java).apply {
+                action = ACTION_START
+                `package` = packageName
+            }
+            val pendingIntent = PendingIntent.getService(
+                applicationContext,
+                1002,
+                restartIntent,
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            )
+            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            try {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis() + 1000L,
+                    pendingIntent
+                )
+            } catch (_: Exception) {
+                alarmManager.set(
+                    AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis() + 1000L,
+                    pendingIntent
+                )
+            }
+        }
+    }
+
     private fun stopRemoteService() {
         isServiceRunning = false
+        pollingJob?.cancel()
+        pollingJob = null
         try {
             if (wakeLock?.isHeld == true) {
                 wakeLock?.release()
             }
         } catch (_: Exception) {}
 
-        serviceScope.cancel()
+        serviceJob.cancel()
+        serviceJob = SupervisorJob()
+        serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
+
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
     }
