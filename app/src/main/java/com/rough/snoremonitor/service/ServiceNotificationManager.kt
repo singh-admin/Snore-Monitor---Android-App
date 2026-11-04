@@ -14,9 +14,14 @@ object ServiceNotificationManager {
     const val CHANNEL_ID = "snore_monitor_channel"
     const val NOTIFICATION_ID = 1001
 
+    const val REMOTE_CHANNEL_ID = "snore_remote_control_channel"
+    const val REMOTE_NOTIFICATION_ID = 1002
+
     fun createNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
+            val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            val detectionChannel = NotificationChannel(
                 CHANNEL_ID,
                 "Snore Detection Service",
                 NotificationManager.IMPORTANCE_LOW
@@ -24,9 +29,41 @@ object ServiceNotificationManager {
                 description = "Shows ongoing status while monitoring sleep audio"
                 setShowBadge(false)
             }
-            val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(channel)
+            manager.createNotificationChannel(detectionChannel)
+
+            val remoteChannel = NotificationChannel(
+                REMOTE_CHANNEL_ID,
+                "Telegram Remote Control",
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                description = "Shows status while listening for Telegram remote commands"
+                setShowBadge(false)
+            }
+            manager.createNotificationChannel(remoteChannel)
         }
+    }
+
+    fun buildRemoteNotification(context: Context, statusText: String): Notification {
+        createNotificationChannel(context)
+
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        return NotificationCompat.Builder(context, REMOTE_CHANNEL_ID)
+            .setContentTitle("Telegram Remote Control Active")
+            .setContentText(statusText)
+            .setSmallIcon(android.R.drawable.ic_menu_send)
+            .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentIntent(pendingIntent)
+            .build()
     }
 
     fun buildForegroundNotification(context: Context, statusText: String): Notification {

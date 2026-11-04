@@ -30,4 +30,12 @@ class AppPreferences(context: Context) {
     var isScheduled: Boolean
         get() = prefs.getBoolean("is_scheduled", false)
         set(value) = prefs.edit().putBoolean("is_scheduled", value).apply()
+
+    var isRemoteControlEnabled: Boolean
+        get() = prefs.getBoolean("is_remote_control_enabled", false)
+        set(value) = prefs.edit().putBoolean("is_remote_control_enabled", value).apply()
+
+    var lastTelegramUpdateId: Long
+        get() = prefs.getLong("last_telegram_update_id", 0L)
+        set(value) = prefs.edit().putLong("last_telegram_update_id", value).apply()
 }
