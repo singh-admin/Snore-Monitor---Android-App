@@ -23,6 +23,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,6 +44,7 @@ import com.rough.snoremonitor.data.AppPreferences
 import com.rough.snoremonitor.dispatch.TelegramDispatcher
 import com.rough.snoremonitor.scheduler.AlarmScheduler
 import com.rough.snoremonitor.service.SnoreDetectionService
+import com.rough.snoremonitor.service.TelegramRemoteService
 import kotlinx.coroutines.launch
 
 @Composable
@@ -55,6 +57,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
     var chatId by remember { mutableStateOf(prefs.chatId) }
     var sensitivity by remember { mutableFloatStateOf(prefs.sensitivityDb) }
     var isScheduled by remember { mutableStateOf(prefs.isScheduled) }
+    var isRemoteEnabled by remember { mutableStateOf(prefs.isRemoteControlEnabled) }
     var testStatusMessage by remember { mutableStateOf("") }
 
     val scrollState = rememberScrollState()
@@ -182,6 +185,68 @@ fun MainScreen(modifier: Modifier = Modifier) {
                             color = if (testStatusMessage.startsWith("✅")) Color(0xFF2E7D32) else Color(0xFFD32F2F)
                         )
                     }
+                }
+            }
+
+            // Remote Control Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (isRemoteEnabled) Color(0xFFE8F5E9) else MaterialTheme.colorScheme.surfaceVariant
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "📡 Telegram Remote Control",
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 17.sp,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = "Listen or check status from upstairs anytime",
+                                fontSize = 13.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Switch(
+                            checked = isRemoteEnabled,
+                            onCheckedChange = { enabled ->
+                                isRemoteEnabled = enabled
+                                prefs.isRemoteControlEnabled = enabled
+                                val serviceIntent = Intent(context, TelegramRemoteService::class.java).apply {
+                                    action = if (enabled) TelegramRemoteService.ACTION_START else TelegramRemoteService.ACTION_STOP
+                                }
+                                ContextCompat.startForegroundService(context, serviceIntent)
+                            }
+                        )
+                    }
+
+                    Text(
+                        text = if (isRemoteEnabled) {
+                            "🟢 Active: Send /listen or /status on Telegram anytime."
+                        } else {
+                            "⚪ Inactive: Turn switch ON to control this phone from upstairs."
+                        },
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = if (isRemoteEnabled) Color(0xFF2E7D32) else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Text(
+                        text = "Telegram Commands from upstairs:\n• /listen — Record 15-second room audio now\n• /status — Check battery and connection\n• /help — View available commands",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
 
