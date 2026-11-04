@@ -36,6 +36,12 @@
             android:exported="false"
             android:foregroundServiceType="microphone" />
 
+        <service
+            android:name=".service.TelegramRemoteService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="microphone" />
+
         <receiver
             android:name=".receiver.AlarmReceiver"
             android:exported="false" />
