@@ -1,11 +1,71 @@
-*.iml
-.gradle
-/local.properties
-/.idea/
-.DS_Store
-/build
-/app/build
-/captures
-.externalNativeBuild
-.cxx
+# Built application files (Use GitHub Releases for APK downloads)
+*.apk
+*.ap_
+*.aar
+*.aab
+/snore-monitor.apk
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated build directories
+bin/
+gen/
+out/
+build/
+app/build/
+**/build/
+
+# Gradle files
+.gradle/
+
+# Local configuration file (contains machine-specific SDK paths)
 local.properties
+
+# Keystores & Signing credentials
+*.jks
+*.keystore
+*.p12
+*.key
+signing.properties
+keystore.properties
+
+# Android Studio & IntelliJ IDEA
+*.iml
+.idea/
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+
+# Kotlin compiler caches
+.kotlin/
+*.kotlin_module
+
+# Native build caches
+.externalNativeBuild/
+.cxx/
+
+# Google Services / Firebase API keys
+google-services.json
+
+# Profiling and memory dumps
+captures/
+/captures/
+*.hprof
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Local agent & tooling
+.superpowers/
