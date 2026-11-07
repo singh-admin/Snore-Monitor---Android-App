@@ -53,3 +53,10 @@ An automated, private sleep-monitoring Android application designed to detect sn
 ```
 The compiled APK will be located at:
 `app/build/outputs/apk/debug/app-debug.apk`
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
